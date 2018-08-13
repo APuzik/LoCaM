@@ -41,12 +41,18 @@ namespace LoCaMEngine.Actions
                 int exceedDamage = 0;
                 (damageDealt, exceedDamage) = attackCreature.AttackCreature(defenseCreature);
 
+                if (attackCreature.IsDead)
+                    player.Table.Remove(attackCreature.Id);
+
+                if (defenseCreature.IsDead)
+                    opponent.Table.Remove(defenseCreature.Id);
+
                 opponent.TakeDamage(exceedDamage);
             }
 
             if (attackCreature.IsDrain)
             {
-                player.TakeDamage(-damageDealt);
+                player.ChangeHealth(damageDealt);
             }
 
             return true;

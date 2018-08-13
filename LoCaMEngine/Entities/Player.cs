@@ -55,10 +55,15 @@ namespace LoCaMEngine.Entities
             card.Location = 0;
         }
 
-        private void RemoveRune()
+        public void RemoveRune()
         {
+            Data.Health = Math.Min(Data.Health, RunesCount * RUNE_HP);
             RunesCount--;
-            Data.Health = RunesCount * RUNE_HP;
+        }
+
+        public int ChangeHealth(int amount)
+        {
+            return TakeDamage(-amount);
         }
 
         public int TakeDamage(int damage)
@@ -79,6 +84,14 @@ namespace LoCaMEngine.Entities
         {
             Random rnd = new Random((int)DateTime.Now.Ticks);
             Deck = Deck.OrderBy(x => rnd.Next()).ToList();
+        }
+
+        public void AllowAttack()
+        {
+            foreach(var creature in Table)
+            {
+                creature.Value.ResetAttacks();
+            }
         }
     }
 

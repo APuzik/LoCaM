@@ -363,6 +363,9 @@ namespace LoCaMSimulatorTest
             bool expectedMyIsDead = expectedMyShouldDie || expectedMyCardDefense <= 0;
             bool expectedOppIsDead = expectedOppShouldDie || expectedOppCardDefense <= 0;
 
+            int expectedMyTableCount = expectedMyIsDead ? player1.Table.Count - 1 : player1.Table.Count;
+            int expectedOppTableCount = expectedOppIsDead ? player2.Table.Count - 1 : player2.Table.Count;
+
             AttackAction action = new AttackAction(sourceId, targetId);
             bool result = action.Execute(player1, player2);
 
@@ -378,6 +381,8 @@ namespace LoCaMSimulatorTest
             Assert.IsFalse(attackCreature.IsWard);
             Assert.IsFalse(defenseCreature.IsWard);
             Assert.IsFalse(attackCreature.CanAttack);
+            Assert.AreEqual(expectedMyTableCount, player1.Table.Count);
+            Assert.AreEqual(expectedOppTableCount, player2.Table.Count);
         }
 
         private void RunInvalidAttackCreatureTest(int sourceId, int targetId)

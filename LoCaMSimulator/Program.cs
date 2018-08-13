@@ -17,6 +17,7 @@ namespace LoCaMSimulator
         readonly string PLAYER1_WINS = $"{PLAYER1} wins!";
         readonly string PLAYER2_WINS = $"{PLAYER2} wins!";
         const int CARDS_IN_DECK = 30;
+        const int TURNS_TO_PLAY = 50;
 
         List<IGameAgent> agents;
 
@@ -126,16 +127,27 @@ namespace LoCaMSimulator
             timeoutMs = 1000;
             for (; currentTurn < MAX_TURNS_HARDLIMIT && !IsGameEnded; currentTurn++)
             {
+                if (IsTimeToFinish())
+                {
+                    agents[currentTurn % 2].Player.RemoveRune();
+                }
                 MakeTurn(agents[currentTurn % 2], agents[(currentTurn + 1) % 2]);
                 if (currentTurn > CARDS_IN_DECK + 2)
                     timeoutMs = 100;
             }
         }
 
+        private bool IsTimeToFinish()
+        {
+            return currentTurn >= (CARDS_IN_DECK + TURNS_TO_PLAY) * 2;
+        }
+
         private void MakeTurn(IGameAgent agent, IGameAgent opponent)
         {
             agent.Player.ResetMana();
+            agent.Player.AllowAttack();
             agent.Player.DrawCards();
+            
             if (agent.Player.IsAlive)
             {
                 List<Card> cards = gameState.GetVisibleCards(agent.Player, opponent.Player);
@@ -249,8 +261,8 @@ namespace LoCaMSimulator
         {
             //string executableName1 = @"G:\AS\codinggame\LoCaMSimulator\Debug\CardsCpp.exe";//
             //string executableName2 = @"G:\AS\codinggame\LoCaMSimulator\Debug\CardsCpp1.exe";//
-            string executableName1 = @"D:\Projects\codinggame\LoCaMSimulator\CardsSharp\bin\Debug\CardsSharp.exe";//@"G:\AS\codinggame\LoCaMSimulator\Debug\CardsCpp.exe";//
-            string executableName2 = @"D:\Projects\codinggame\LoCaMSimulator\CardsSharp\bin\Debug\CardsSharp.exe";// @"G:\AS\codinggame\LoCaMSimulator\Debug\CardsCpp1.exe";//
+            string executableName1 = @"..\..\..\CardsSharp\bin\Debug\CardsSharp.exe";//@"G:\AS\codinggame\LoCaMSimulator\Debug\CardsCpp.exe";//
+            string executableName2 = @"..\..\..\CardsSharp\bin\Debug\CardsSharp.exe";// @"G:\AS\codinggame\LoCaMSimulator\Debug\CardsCpp1.exe";//
 
             GameReferee referee = new GameReferee();
             referee.CreateGameProcesses(executableName1, executableName2);

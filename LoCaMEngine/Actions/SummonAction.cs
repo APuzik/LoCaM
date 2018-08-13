@@ -24,8 +24,8 @@ namespace LoCaMEngine.Actions
             }
 
             Card card = player.Hand[id];
-            player.TakeDamage(-card.MyHealthChange);
-            opponent.TakeDamage(card.OppHealthChange);
+            player.ChangeHealth(card.MyHealthChange);
+            opponent.ChangeHealth(card.OppHealthChange);
             player.NextDrawSize += card.Draw;
 
             player.Hand.Remove(card.Id);

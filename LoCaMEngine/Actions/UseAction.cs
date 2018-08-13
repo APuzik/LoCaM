@@ -27,7 +27,7 @@ namespace LoCaMEngine.Actions
             Player targetPlayer = null;
             if (target == -1)
             {
-                opponent.TakeDamage(item.Defense);
+                opponent.ChangeHealth(item.Defense);
             }
             else
             {
@@ -45,8 +45,8 @@ namespace LoCaMEngine.Actions
                 targetPlayer.Table[target].Card.Defense += item.Defense;
             }
 
-            player.TakeDamage(-item.MyHealthChange);
-            opponent.TakeDamage(item.OppHealthChange);
+            player.ChangeHealth(item.MyHealthChange);
+            opponent.ChangeHealth(item.OppHealthChange);
             player.NextDrawSize += item.Draw;
 
             player.Hand.Remove(item.Id);
