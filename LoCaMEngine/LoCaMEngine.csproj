@@ -70,6 +70,7 @@
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Entities\CombatCreature.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="GameEngine.cs" />
     <Compile Include="Interfaces\IGameAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

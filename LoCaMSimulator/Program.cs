@@ -1,4 +1,5 @@
-﻿using LoCaMEngine.Entities;
+﻿using LoCaMEngine;
+using LoCaMEngine.Entities;
 using LoCaMEngine.Interfaces;
 using LoCaMSimulator.Interfaces;
 using System;
@@ -22,6 +23,7 @@ namespace LoCaMSimulator
         List<IGameAgent> agents;
 
         GameState gameState;
+        GameEngine gameEngine = new GameEngine();
 
         public ActionParser ActionParser { get; set; }
         int currentTurn = 0;
@@ -106,24 +108,14 @@ namespace LoCaMSimulator
                     return;
                 DraftNext();
 
-                //agents[0].Event.WaitOne();                
-                //PerformActions(agents[0].Player, agents[0].Output);
-                //agents[1].Event.WaitOne();
-                //PerformActions(agents[1].Player, agents[1].Output);
                 if (currentTurn > 1)
                     timeoutMs = 100;
             }
 
             ActionParser.Factory.IsDraft = false;
-            agents[0].Player.ShaffleDeck();
-            agents[1].Player.ShaffleDeck();
-
-            for (int i = 0; i < 3; i++)
-            {
-                agents[0].Player.DrawCards();
-                agents[1].Player.DrawCards();
-            }
-            agents[1].Player.DrawCards();
+            gameEngine.Shaffle(agents[0].Player, agents[1].Player);
+            gameEngine.MakeInitialDraw(agents[0].Player, agents[1].Player);
+            
             timeoutMs = 1000;
             for (; currentTurn < MAX_TURNS_HARDLIMIT && !IsGameEnded; currentTurn++)
             {
@@ -144,9 +136,7 @@ namespace LoCaMSimulator
 
         private void MakeTurn(IGameAgent agent, IGameAgent opponent)
         {
-            agent.Player.ResetMana();
-            agent.Player.AllowAttack();
-            agent.Player.DrawCards();
+            gameEngine.InitTurn(agent.Player);
             
             if (agent.Player.IsAlive)
             {

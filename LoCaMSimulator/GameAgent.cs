@@ -49,17 +49,34 @@ namespace LoCaMSimulator
             Event.Reset();
             Output = "";
             process.StandardInput.WriteLine(Player.Data.ToString());
-            Console.WriteLine(Player.Data.ToString());
+            Console.WriteLine($"Player: {Player.Data.ToString()}");
             process.StandardInput.WriteLine(opponent.Data.ToString());
-            Console.WriteLine(opponent.Data.ToString());
+            Console.WriteLine($"Opponent: {opponent.Data.ToString()}");
             
             process.StandardInput.WriteLine(opponent.Data.HandSize);
-            Console.WriteLine(opponent.Data.HandSize);
+            Console.WriteLine($"Opponent hand size: {opponent.Data.HandSize}");
             process.StandardInput.WriteLine(cards.Count);
             Console.WriteLine(cards.Count);
+            int location = -2;
             foreach (Card card in cards)
             {
                 process.StandardInput.WriteLine(card.ToString());
+                if (card.Location != location)
+                {
+                    location = card.Location;
+                    if (card.Location == 0)
+                    {
+                        Console.WriteLine("Player's hand");
+                    }
+                    else if (card.Location == 1)
+                    {
+                        Console.WriteLine("Player's table");
+                    }
+                    else if (card.Location == -1)
+                    {
+                        Console.WriteLine("Opponent's table");
+                    }
+                }
                 Console.WriteLine(card.ToString());
             }
             Event.WaitOne();
