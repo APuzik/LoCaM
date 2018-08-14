@@ -225,6 +225,11 @@ namespace CardsSharp
 
             for (int i = 0; i < GameState.myHand.Count && curMana > 0; i++)
             {
+                if(GameState.myHand[i].Type != 0)
+                {
+                    continue;
+                }
+
                 if (GameState.myHand[i].Cost > curMana)
                     break;
 
